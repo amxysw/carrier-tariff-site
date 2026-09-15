@@ -22,7 +22,7 @@
       "updated": "2026-09-15 01:29:26"
     }
   ],
-  "default": "jiangxi",
+  "default": "quanguo",
   "quanguo_total": 133,
   "prov_total": 149,
   "prov_stats": {
@@ -41,6 +41,16 @@
         "套餐": 119,
         "加装包": 5,
         "营销活动": 7
+      }
+    },
+    "quanguo": {
+      "total": 133,
+      "onsale": 133,
+      "dist": {
+        "套餐": 44,
+        "加装包": 28,
+        "营销活动": 60,
+        "特殊群体套餐": 1
       }
     }
   },

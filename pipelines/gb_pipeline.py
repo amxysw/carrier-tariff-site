@@ -298,13 +298,17 @@ def build_latest(scopes, datadir):
             q_total = len(items)
         else:
             prov_total.update(x["title"] for x in items)
-            prov_stats[sc] = {"total": len(items), "onsale": len(items), "dist": dist}
+        # prov_stats 同时收录 quanguo：前端默认展示「全网(全国)」口径，
+        # 总览页的省份统计面板需要它的总数与五大类分布。
+        prov_stats[sc] = {"total": len(items), "onsale": len(items), "dist": dist}
         sections.append({"section": sc, "name": KEY2NAME.get(sc, sc), "total": len(items), "onsale": len(items),
                          "updated": d.get("timestamp") or ""})
-    # 排序：quanguo 最前 → 江西第二 → 其余按键名（用户要求默认省置顶）
+    # 排序：quanguo 最前 → 江西第二 → 其余按键名
     sections.sort(key=lambda s: (0, "") if s["section"] == "quanguo" else
                   (1, "") if s["section"] == "jiangxi" else (2, s["section"]))
-    default = "jiangxi" if any(s["section"] == "jiangxi" for s in sections) else (sections[1]["section"] if len(sections) > 1 else "quanguo")
+    # 默认展示「全网(全国)」：广电站分地区公示数据不全（多数地区为空/很少），
+    # 全网口径才是完整可用的视图。
+    default = "quanguo"
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     latest = {"sections": sections, "default": default, "quanguo_total": q_total, "prov_total": len(prov_total),
               "prov_stats": prov_stats, "updated": now, "timestamp": now}

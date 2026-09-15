@@ -45,18 +45,19 @@ function loadJson(file) {
 
 /* ---------- 板块索引 ---------- */
 let SECTIONS = [];
-let DEF_SECTION = "jiangxi";
+let DEF_SECTION = "quanguo";                 // 默认展示全网(全国)口径
 const PROV_KEY = "gb_selected_prov";
-const LEGACY_DEFAULT_PROV = "hunan";        // 旧版默认省（湖南 → 江西 迁移用）
-const PROV_MIGRATED_KEY = "gb_prov_migrated_v2";
-// 默认省由湖南改为江西后的一次性迁移：旧版本访问过的浏览器里存着 "hunan"
-// （当时的默认省），它的优先级高于新默认，会导致「怎么刷新都显示湖南」。
-// 首次加载新版时清除这条过时记忆；之后用户对任何省份（含湖南）的主动选择
-// 都正常保存并生效，不会被反复重置。
+const LEGACY_DEFAULT_PROVS = ["hunan", "jiangxi"];  // 曾经的默认省（逐次变更的遗留值）
+const PROV_MIGRATED_KEY = "gb_prov_migrated_v3";
+// 默认值经历过 湖南 → 江西 → 全网 的变更：旧版本访问过的浏览器里存着当时的
+// 默认值，其优先级高于新默认，会导致「怎么刷新都显示旧省份」。首次加载新版时
+// 清除这类过时记忆；之后用户对任何省份（含湖南/江西）的主动选择都正常保存生效。
 (function migrateLegacyProv() {
   try {
     if (localStorage.getItem(PROV_MIGRATED_KEY)) return;
-    if (localStorage.getItem(PROV_KEY) === LEGACY_DEFAULT_PROV) localStorage.removeItem(PROV_KEY);
+    if (LEGACY_DEFAULT_PROVS.indexOf(localStorage.getItem(PROV_KEY) || "") >= 0) {
+      localStorage.removeItem(PROV_KEY);
+    }
     localStorage.setItem(PROV_MIGRATED_KEY, "1");
   } catch (e) {}
 })();
@@ -99,7 +100,13 @@ function closeProvPicker() {
 function renderProvGrid() {
   const grid = $("provGrid"); if (!grid) return;
   const items = provList().map((s) => ({ section: s.section, name: s.name }));
-  if (PROV_PICKER === "hProvFilter") items.unshift({ section: "", name: "全部省份" });
+  if (PROV_PICKER === "hProvFilter") {
+    items.unshift({ section: "", name: "全部省份" });
+  } else {
+    // 省份资费 / 总览的选择弹窗：首项为「全网(全国)」（默认项），
+    // 与下拉选项保持一致，否则弹窗里选不到默认项。
+    items.unshift({ section: "quanguo", name: "全网(全国)" });
+  }
   const cur = (PROV_PICKER && $(PROV_PICKER)) ? ($(PROV_PICKER).value || "") : "";
   const s = $("provSearch");
   const k = (s ? s.value : "").trim().toLowerCase();
@@ -130,12 +137,16 @@ function initProvPicker() {
 function fillProvSelects() {
   const provEl = $("pProv");
   const oProv = $("oProv");
-  const opts = provList().map((s) => '<option value="' + esc(s.section) + '">' + esc(s.name) + "</option>").join("");
+  // 首项为「全网(全国)」：广电站默认展示全网口径（分地区公示数据不全），
+  // 选中它时 renderList 仍渲染到「省份资费」页的 DOM（见 domMap 的 rawKey）。
+  const opts = '<option value="quanguo">全网(全国)</option>' +
+    provList().map((s) => '<option value="' + esc(s.section) + '">' + esc(s.name) + "</option>").join("");
+  const isValidProv = (v) => v === "quanguo" || provList().some((s) => s.section === v);
   if (provEl && provEl.options.length === 0) {
     provEl.innerHTML = opts;
     let mem = "";
     try { mem = localStorage.getItem(PROV_KEY) || ""; } catch (e) {}
-    provEl.value = provList().some((s) => s.section === mem) ? mem : DEF_SECTION;
+    provEl.value = isValidProv(mem) ? mem : DEF_SECTION;
     provEl.addEventListener("change", () => {
       const v = provEl.value;
       try { localStorage.setItem(PROV_KEY, v); } catch (e) {}
@@ -152,7 +163,7 @@ function fillProvSelects() {
     oProv.innerHTML = opts;
     let mem = "";
     try { mem = localStorage.getItem(PROV_KEY) || ""; } catch (e) {}
-    oProv.value = provList().some((s) => s.section === mem) ? mem : DEF_SECTION;
+    oProv.value = isValidProv(mem) ? mem : DEF_SECTION;
     oProv.addEventListener("change", () => {
       const v = oProv.value;
       try { localStorage.setItem(PROV_KEY, v); } catch (e) {}
@@ -178,6 +189,7 @@ function fillProvSelects() {
 /* ---------- Tab 切换（支持 hash 直达） ---------- */
 const TAB_SHOWN = {};
 function goTab(v) {
+  CUR_VIEW = v;   // 记录视图键，供 domMap 区分渲染容器（见 domMap 注释）
   document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.dataset.view === v));
   document.querySelectorAll(".view").forEach((x) => x.classList.remove("active"));
   $("view-" + v).classList.add("active");
@@ -263,6 +275,9 @@ function renderBarsBox(box, dist) {
 /* ---------- 列表（全国 / 省份） ---------- */
 const PAGE_SIZE = 20;
 const listState = {};
+// 当前视图键（overview / quanguo / prov / history / about）：
+// domMap 需要用它区分「全国资费」页与「省份资费」页选中「全网(全国)」的渲染容器。
+let CUR_VIEW = "overview";
 function liveSec() {
   const el = document.getElementById("pProv");
   return (el && el.value) || DEF_SECTION;
@@ -272,7 +287,10 @@ function getSt(section) {
   return listState[section];
 }
 function domMap(section) {
-  if (section === "quanguo") {
+  // 「省份资费」页选中「全网(全国)」时 section 也是 quanguo，必须渲染到该页
+  // 自己的 DOM（pList）；否则内容会写进「全国资费」页的 qList，当前页反而空白。
+  // 因此用当前视图键（CUR_VIEW）而非仅看 section 来判断。
+  if (section === "quanguo" && CUR_VIEW !== "prov") {
     return { list: "qList", pager: "qPager", cnt: "qCount", search: "qSearch", scope: "qScope", type: "qType", sub: "qSub", reload: "qReload" };
   }
   return { list: "pList", pager: "pPager", cnt: "pCount", search: "pSearch", scope: "pScope", type: "pType", sub: "pSub", reload: "pReload" };
@@ -300,7 +318,7 @@ function renderList(section) {
       });
     }
   }
-  if (section !== "quanguo") { ensureSections(); }
+  if (rawKey !== "quanguo") { ensureSections(); }
   const st = getSt(section);
   const idm = domMap(section);
   const listEl = $(idm.list);
@@ -311,7 +329,12 @@ function renderList(section) {
   loadJson(file).then((d) => {
     st.items = d.items || [];
     $("updateTime").textContent = "更新于 " + (d.timestamp || "未知");
-    if (section !== "quanguo") { $("pProv").value = (provList().some((s) => s.section === section) ? section : $("pProv").value); syncProvTxt("pProv"); }
+    if (rawKey === "prov") {
+      // 同步选择器（含「全网(全国)」情形），保持下拉显示与实际渲染板块一致
+      const pvEl = $("pProv");
+      if (pvEl && (section === "quanguo" || provList().some((s) => s.section === section))) pvEl.value = section;
+      syncProvTxt("pProv");
+    }
     drawList(section);
   }).catch((e) => { listEl.innerHTML = '<div class="empty">数据加载失败：' + esc(e.message) + "</div>"; });
 
