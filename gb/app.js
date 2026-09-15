@@ -36,7 +36,9 @@ function fetchTimeout(url, init) {
 }
 function loadJson(file) {
   if (cache[file]) return Promise.resolve(cache[file]);
-  return fetchTimeout(DATA + file)
+  // no-store：数据快照一律直连网络，避免 HTTP 缓存（max-age=600）导致
+  // 刷新后仍读到旧快照。
+  return fetchTimeout(DATA + file, { cache: "no-store" })
     .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then((j) => { cache[file] = j; return j; });
 }

@@ -145,7 +145,10 @@ function fetchTimeout(url, init) {
 
 function loadJson(file) {
   if (cache[file]) return Promise.resolve(cache[file]);
-  return fetchTimeout(DATA + file)
+  // no-store：数据快照一律直连网络。GitHub Pages 对 JSON 默认
+  // cache-control: max-age=600，沿用 HTTP 缓存会让「刷新」仍拿到旧快照
+  // （表现为默认省、资费条数与实际不符）。
+  return fetchTimeout(DATA + file, { cache: "no-store" })
     .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then((j) => { cache[file] = j; return j; });
 }
@@ -154,7 +157,7 @@ function loadJson(file) {
 let announceCache = null;
 function loadAnnounce() {
   if (announceCache) return Promise.resolve(announceCache);
-  return fetchTimeout(DATA + "announce.json")
+  return fetchTimeout(DATA + "announce.json", { cache: "no-store" })
     .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then((j) => { announceCache = j; return j; })
     .catch((e) => { announceCache = null; throw e; });

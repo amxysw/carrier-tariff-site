@@ -688,12 +688,11 @@ $('importBtn').addEventListener('click',function(){$('importFile').click()});
 $('importFile').addEventListener('change',function(){const f=this.files[0];if(!f)return;const r=new FileReader();r.onload=function(){importCfg(r.result)};r.readAsText(f);this.value=''});
 $('importGo').addEventListener('click',function(){if($('importText').value.trim())importCfg($('importText').value)});
 
-/* 离线缓存（无安装引导，装不装由用户在浏览器菜单里决定） */
-if('serviceWorker' in navigator){
- window.addEventListener('load',function(){
-  navigator.serviceWorker.register('./sw.js').catch(function(){/* 不支持则忽略 */});
- });
-}
+/* Service Worker 已停用：
+   原 SW 为「配置中心离线可打开」而设，但其作用域覆盖整个站点目录，且采用
+   「缓存优先」策略，把 data/*.json、app.js 等站点资源一并缓存并优先返回，
+   导致站点长期显示旧快照（默认省/资费数据反复横跳）。
+   现不再注册；sw.js 保留为清理脚本，用于自动注销老浏览器里已注册的 SW。 */
 })();
 </script>
 </body>
