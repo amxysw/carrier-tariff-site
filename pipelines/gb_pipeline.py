@@ -306,9 +306,10 @@ def build_latest(scopes, datadir):
     # 排序：quanguo 最前 → 江西第二 → 其余按键名
     sections.sort(key=lambda s: (0, "") if s["section"] == "quanguo" else
                   (1, "") if s["section"] == "jiangxi" else (2, s["section"]))
-    # 默认展示「全网(全国)」：广电站分地区公示数据不全（多数地区为空/很少），
-    # 全网口径才是完整可用的视图。
-    default = "quanguo"
+    # 默认展示湖南（与电信站保持一致）；若本轮未抓湖南（focus 模式下可能不包含），
+    # 则退到第二个板块，避免 default 指向不存在的板块导致前端选择器为空。
+    default = "hunan" if any(s["section"] == "hunan" for s in sections) else \
+        (sections[1]["section"] if len(sections) > 1 else "quanguo")
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     latest = {"sections": sections, "default": default, "quanguo_total": q_total, "prov_total": len(prov_total),
               "prov_stats": prov_stats, "updated": now, "timestamp": now}

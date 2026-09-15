@@ -45,13 +45,14 @@ function loadJson(file) {
 
 /* ---------- 板块索引 ---------- */
 let SECTIONS = [];
-let DEF_SECTION = "quanguo";                 // 默认展示全网(全国)口径
+let DEF_SECTION = "hunan";                   // 默认展示湖南（与电信站一致）
 const PROV_KEY = "gb_selected_prov";
-const LEGACY_DEFAULT_PROVS = ["hunan", "jiangxi"];  // 曾经的默认省（逐次变更的遗留值）
-const PROV_MIGRATED_KEY = "gb_prov_migrated_v3";
-// 默认值经历过 湖南 → 江西 → 全网 的变更：旧版本访问过的浏览器里存着当时的
-// 默认值，其优先级高于新默认，会导致「怎么刷新都显示旧省份」。首次加载新版时
-// 清除这类过时记忆；之后用户对任何省份（含湖南/江西）的主动选择都正常保存生效。
+const LEGACY_DEFAULT_PROVS = ["jiangxi"];   // 曾经的默认省（江西），需视为过时记忆清理
+const PROV_MIGRATED_KEY = "gb_prov_migrated_v4";
+// 默认值经历过 湖南 → 江西 → 全网 → 湖南 的反复变更：旧版本访问过的浏览器里
+// 可能存着当时的默认值（如江西），其优先级高于新默认，会导致「怎么刷新都显示
+// 旧省份」。首次加载新版时清除这类过时记忆；之后用户对任何省份（含江西/全国）
+// 的主动选择都正常保存生效，不会被反复重置。
 (function migrateLegacyProv() {
   try {
     if (localStorage.getItem(PROV_MIGRATED_KEY)) return;
@@ -137,8 +138,8 @@ function initProvPicker() {
 function fillProvSelects() {
   const provEl = $("pProv");
   const oProv = $("oProv");
-  // 首项为「全网(全国)」：广电站默认展示全网口径（分地区公示数据不全），
-  // 选中它时 renderList 仍渲染到「省份资费」页的 DOM（见 domMap 的 rawKey）。
+  // 首项为「全网(全国)」：默认选中湖南（与电信站一致），同时提供「全网(全国)」
+  // 供切换；选中全国时 renderList 仍渲染到「省份资费」页的 DOM（见 domMap）。
   const opts = '<option value="quanguo">全网(全国)</option>' +
     provList().map((s) => '<option value="' + esc(s.section) + '">' + esc(s.name) + "</option>").join("");
   const isValidProv = (v) => v === "quanguo" || provList().some((s) => s.section === v);
