@@ -418,7 +418,7 @@ const SAMPLE=[{k:'移动',c:'🔵',a:340,r:284,m:1196,f:'无变化'},{k:'联通'
  {k:'电信',c:'🟢',a:7,r:8,m:0,f:'新增7 下架8 修改0'},{k:'广电',c:'🟣',a:5,r:1,m:1,f:'无变化'}];
 function provName(code){for(let i=0;i<PROV.length;i++){if(PROV[i][1]===code)return PROV[i][0]}return code}
 function buildText(isTest){
- const p=cfg.push;const focus=provName((p.focus||'hunan').trim().toLowerCase());
+ const p=cfg.push;const focus=provName((p.focus||'jiangxi').trim().toLowerCase());
  if(isTest){
   return '【资费监控】推送测试 ✓\n渠道连通正常，密钥未离开本设备。\n关注省份：'+focus+'，统计最近 '+(p.since||'24')+' 小时。';
  }
@@ -456,7 +456,7 @@ function secretsList(){
  if(cfg.feishu.enabled){L.push(['FEISHU_WEBHOOK',cfg.feishu.webhook]);if(cfg.feishu.secret)L.push(['FEISHU_SECRET',cfg.feishu.secret])}
  if(cfg.wecom.enabled){L.push(['WECOM_WEBHOOK',cfg.wecom.webhook])}
  if(cfg.email.enabled){[['SMTP_HOST',cfg.email.host],['SMTP_PORT',cfg.email.port],['SMTP_USER',cfg.email.user],['SMTP_PASS',cfg.email.pass],['MAIL_TO',cfg.email.to]].forEach(function(x){L.push(x)})}
- L.push(['FOCUS_SEC',(fpList().length?fpList().join(','):(p.focus||'hunan'))]);L.push(['SINCE_HOURS',p.since||'24']);
+ L.push(['FOCUS_SEC',(fpList().length?fpList().join(','):(p.focus||'jiangxi'))]);L.push(['SINCE_HOURS',p.since||'24']);
  if(p.siteUrl)L.push(['SITE_URL',p.siteUrl]);
  return L;
 }
