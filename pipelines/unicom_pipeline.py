@@ -80,8 +80,54 @@ def build_jobs():
     return jobs
 
 
-def fetch_pool(province_id, city_id, attr, pages=20, passes=12, min_rounds=60, empty_stop=30,
-               page_size=500, stale_stop=60, time_budget=300, partial=None):
+# 抓取强度（可调）：接口每次只回 500 条随机子集，必须多轮采样累积才能覆盖全集。
+# 默认 5 分钟预算对常规抓取够用，但会把覆盖率压在 20% 上下——新上线的业务
+# 很容易落在未采到的部分（实测：江西「联通智家AI家组合版119元档」就因此缺失）。
+# 重点省深抓时用环境变量放宽，捕获率显著提升：
+#   UNICOM_TIME_BUDGET=1200 UNICOM_MIN_ROUNDS=200
+FETCH_TIME_BUDGET = int(os.getenv("UNICOM_TIME_BUDGET") or "300")
+FETCH_MIN_ROUNDS = int(os.getenv("UNICOM_MIN_ROUNDS") or "60")
+FETCH_PASSES = int(os.getenv("UNICOM_PASSES") or "12")
+
+# 费用分段扫描（默认开启；UNICOM_FEE_SEGMENT=0 可关闭）
+FEE_ENABLE = (os.getenv("UNICOM_FEE_SEGMENT") or "1") != "0"
+FEE_MAX = 999999
+FEE_MAX_DEPTH = int(os.getenv("UNICOM_FEE_DEPTH") or "14")
+
+
+def _sweep_fee(province_id, city_id, attr, page_size, seen):
+    """按费用区间递归细分抓取，把结果并入 seen。
+
+    为什么需要它：接口单次最多 500 条，且「同一组参数反复请求」返回的是同一个
+    固定子集（详见 fetch_pool 的 docstring）。但 startFee/endFee 不同会返回不同
+    业务，因此把费用区间二分到「每段返回 < 一页」，即可接近全覆盖。
+    实测江西：15 段 / 15 次请求 → 1916 条；而多轮采样 1200 次请求只有 710 条。
+    """
+    def rec(lo, hi, depth):
+        q = ("provinceId=%s&cityId=%s&tariffAttributes=%s&firstLevel=1&secondLevel=1001"
+             "&name=&startFee=%d&endFee=%d&pageNum=1&pageSize=%d") % (
+            province_id, city_id, attr, lo, hi, page_size)
+        try:
+            d = api("TariffMenuDataRetrieval", q, retries=3)
+        except Exception as e:
+            print("    [费用段 %d-%d] 失败: %s" % (lo, hi, str(e)[:60]))
+            return
+        lst = (d.get("data") or {}).get("tariffList") or []
+        for x in lst:
+            seen[x["id"]] = {
+                "id": x["id"], "title": x.get("title", ""), "fee": x.get("fee", ""),
+                "firstLevel": x.get("firstLevel", ""), "secondLevel": x.get("secondLevel", ""),
+            }
+        # 写满一页 → 该段仍可能被截断，二分继续细分
+        if len(lst) >= page_size and lo < hi and depth < FEE_MAX_DEPTH:
+            mid = (lo + hi) // 2
+            rec(lo, mid, depth + 1)
+            rec(mid + 1, hi, depth + 1)
+    rec(0, FEE_MAX, 0)
+
+
+def fetch_pool(province_id, city_id, attr, pages=20, passes=None, min_rounds=None, empty_stop=30,
+               page_size=500, stale_stop=60, time_budget=None, partial=None):
     """采集板块套餐池：接口为随机子集轮换(非严格分页，pageSize 硬限 500)。
 
     策略：循环多轮遍历 pageNum(1..pages) 反复采样，按 id 去重累积，
@@ -99,8 +145,22 @@ def fetch_pool(province_id, city_id, attr, pages=20, passes=12, min_rounds=60, e
       ★★ 2026-09-12 修复：原判据额外要求 "累计条数为 page_size 整倍数"，
       导致湖南等 7 个恰好抓到 1000(=500×2) 条的省份被误杀。
       该条件与"分页失效"无因果关系，已移除；stale_stop 20 → 60 提高误判门槛。
+
+    ★★★ 费用分段扫描（2026-09-15 新增）：
+      上面「多轮采样」在多数板块其实无效——服务端每次返回同一个固定子集，
+      再跑多少轮都不增加（实测江西 200 轮 / 1200 次请求仍只有 710 条，
+      导致新上线业务「联通智家AI家组合版119元档」长期缺失）。
+      换 startFee/endFee 才会返回不同业务：按费用递归细分，江西 15 次请求
+      即拿到 1916 条（原 989 条）并完整覆盖该新业务。故先做一遍费用分段
+      扫描，再用多轮采样补充。
     """
+    passes = FETCH_PASSES if passes is None else passes
+    min_rounds = FETCH_MIN_ROUNDS if min_rounds is None else min_rounds
+    time_budget = FETCH_TIME_BUDGET if time_budget is None else time_budget
     seen = {}
+    if FEE_ENABLE:
+        _sweep_fee(province_id, city_id, attr, page_size, seen)
+        print("    费用分段扫描完成：累计 %d 条" % len(seen))
     empty_run = 0
     rounds = 0
     stale_run = 0
