@@ -284,10 +284,30 @@ def save(path, obj):
         json.dump(obj, f, ensure_ascii=False, separators=(",", ":"))
 
 
+def _all_sections(datadir):
+    """扫描数据目录，返回其中已有的全部板块（拼音）。
+
+    focus 模式只抓少数地区，若按本次 scopes 生成 latest.json，站点地区索引
+    会缩水（其余地区数据文件仍在却从下拉消失）。这里改为扫描目录，
+    用 KEY2NAME 白名单顺带排除 latest/history/announce 等非板块文件。
+    """
+    found = []
+    try:
+        for fn in sorted(os.listdir(datadir)):
+            if not fn.endswith(".json"):
+                continue
+            sec = fn[:-5]
+            if sec == "quanguo" or sec in KEY2NAME:
+                found.append(sec)
+    except OSError:
+        return []
+    return found
+
+
 def build_latest(scopes, datadir):
     sections, prov_total, prov_stats = [], set(), {}
     q_total = None
-    for sc in scopes:
+    for sc in (_all_sections(datadir) or list(scopes)):
         d = load(os.path.join(datadir, sc + ".json"))
         items = d["items"]
         dist = {}

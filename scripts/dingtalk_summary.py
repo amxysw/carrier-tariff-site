@@ -75,6 +75,16 @@ SITES = [
     ("gb/data/history.json", "广电", "🟣"),
 ]
 
+# ── 省级定向推送（Province Notify）──
+# NOTIFY_PROVINCES=jiangxi,fujian 时启用：只统计指定省份的变化，用于每组
+# 数小时的盯盘推送（由 province-notify.yml 调用）。为空则走原有「四家全量汇总」。
+# 只统计移动 / 联通：电信与广电不参与省级推送（电信源站无这些省，广电数据口径不同）。
+NOTIFY_PROVINCES = [x.strip().lower() for x in (os.getenv("NOTIFY_PROVINCES") or "").split(",") if x.strip()]
+PROVINCE_SITES = [
+    ("data/history.json", "移动", "🔵"),
+    ("unicom/data/history.json", "联通", "🟠"),
+]
+
 CST = timezone(timedelta(hours=8))
 
 # 板块 key（拼音）-> 中文名。数据里存的是拼音，直接展示会看不懂。
@@ -178,7 +188,7 @@ def human_ago(dt, now):
     return "%d 天前" % int(secs // 86400)
 
 
-def summarize(hist, since):
+def summarize(hist, since, only_secs=None):
     """汇总某站「最新一轮」的变化。
 
     注意：这里刻意不累加窗口内所有轮次。之前累加导致 24h 内每轮推送
@@ -205,6 +215,9 @@ def summarize(hist, since):
             continue
         for k, v in e.items():
             if k == "ts" or not isinstance(v, dict):
+                continue
+            # 省级推送：只统计指定板块（其余省份/全网的变更不计入）
+            if only_secs is not None and str(k).strip().lower() not in only_secs:
                 continue
             a = int(v.get("added", 0) or 0)
             r = int(v.get("removed", 0) or 0)
@@ -316,6 +329,53 @@ def send_notify(title, text):
         return [("钉钉", bool(ok), "")]
 
 
+def province_notify(provs):
+    """省级定向推送：只报指定省份（移动 / 联通）的变化。
+
+    用于「每几小时盯几个省」的场景：统计窗口默认 2 小时（PROVINCE_SINCE_HOURS
+    可改），只列指定省份板块，不含全网与其他省份，避免与四家全量汇总互相干扰。
+    """
+    try:
+        hours = int(os.getenv("PROVINCE_SINCE_HOURS") or "2")
+    except ValueError:
+        hours = 2
+    now = datetime.now(CST)
+    since = now - timedelta(hours=hours)
+    sec_set = set(provs)
+    names = "、".join(sec_cn(p) for p in provs)
+    lines = ["## %s 资费变化" % names, "",
+             "**统计范围**：%s ~ %s (北京时间)" %
+             (since.strftime("%m-%d %H:%M"), now.strftime("%m-%d %H:%M")), ""]
+    any_change = False
+    grand = [0, 0, 0]
+    for path, name, icon in PROVINCE_SITES:
+        hist = load_history(path)
+        a, r, m, _secs, batches = summarize(hist, since, sec_set)
+        grand[0] += a; grand[1] += r; grand[2] += m
+        if not (a or r or m):
+            checked = load_latest_time(path)
+            suffix = "（数据至 %s）" % checked.strftime("%m-%d %H:%M") if checked else ""
+            lines.append("- %s **%s**：无变化%s" % (icon, name, suffix))
+            continue
+        any_change = True
+        lines.append("- %s **%s**：新增 %d、下架 %d、修改 %d" % (icon, name, a, r, m))
+        for sec_name, desc in batches[:3]:
+            lines.append("　└ %s：%s" % (sec_name, desc))
+    lines.append("")
+    lines.append("**合计**：新增 %d、下架 %d、修改 %d" % tuple(grand))
+    if not any_change:
+        lines.append("")
+        lines.append("> 本时段内 %s 均无资费变化。" % names)
+    lines.append("")
+    lines.append("---")
+    lines.append("🔗 [%s资费详情](%s/#prov)" % (names, SITE_URL.rstrip("/")))
+    text = "\n".join(lines)
+    print(text)
+    title = "%s资费 %s 新增%d 下架%d 修改%d" % (
+        names, now.strftime("%H:%M"), grand[0], grand[1], grand[2])
+    send_notify(title, text)
+
+
 def main():
     # 测试模式：验证 webhook/加签是否配对正确，不读数据
     if TEST_MODE:
@@ -342,6 +402,11 @@ def main():
         print("测试完成：成功 %d / 已配置 %d%s"
               % (len(okc), len(res or []),
                  ("（%s）" % "、".join(okc)) if okc else ""))
+        return
+
+    # 省级定向推送模式（province-notify.yml 通过 NOTIFY_PROVINCES 启用）
+    if NOTIFY_PROVINCES:
+        province_notify(NOTIFY_PROVINCES)
         return
 
     now = datetime.now(CST)

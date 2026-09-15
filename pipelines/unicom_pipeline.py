@@ -598,10 +598,31 @@ def _flush_pool(pool, datadir, now):
 # 32 板块 × 上千条做 md5 + titles 排序，是纯死数据、白耗 CPU / IO。
 
 
+def _all_sections(datadir):
+    """扫描数据目录，返回其中已有的全部板块（拼音）。
+
+    为什么不能只用本次抓取的 scopes：focus 模式只抓少数省份，若按 scopes
+    生成 latest.json，站点板块索引会缩水——其余省份数据文件仍在，却从省份
+    下拉里消失。改为扫描目录后，focus 轮次同样保住完整索引。
+    用 NAME 白名单顺带排除了 latest/history/_pool/_baseline 等非板块文件。
+    """
+    found = []
+    try:
+        for fn in sorted(os.listdir(datadir)):
+            if not fn.endswith(".json"):
+                continue
+            sec = fn[:-5]
+            if sec == "quanguo" or sec in NAME:
+                found.append(sec)
+    except OSError:
+        return []
+    return found
+
+
 def build_latest(scopes, datadir):
     sections, prov_total, prov_stats = [], set(), {}
     q_total = None
-    for sc in scopes:
+    for sc in (_all_sections(datadir) or list(scopes)):
         p = os.path.join(datadir, sc + ".json")
         if not os.path.exists(p):
             continue
