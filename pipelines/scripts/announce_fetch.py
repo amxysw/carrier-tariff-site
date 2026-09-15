@@ -242,7 +242,12 @@ def fetch_uni():
             "date": (row.get("publishTime") or "")[:10],
             "page_url": UNI_DETAIL_PAGE.format(id=row.get("id") or ""),
         })
-    items = [x for x in items if x["id"]][:MAX_KEEP]
+    items = [x for x in items if x["id"]]
+    # 联通接口按「官方置顶顺序」返回（会将多年前的公告置顶，如 2015 年那条），
+    # 并非时间倒序；先按发布时间排序再取前 MAX_KEEP 条，否则旧置顶公告会挤掉
+    # 真正的近期公告，且展示顺序看起来像抓到了陈年数据。
+    items.sort(key=lambda x: x.get("date") or "", reverse=True)
+    items = items[:MAX_KEEP]
     print(f"[联通] 列表 {len(lst)} 条，取最新 {len(items)} 条")
     for it in items:
         try:
@@ -263,6 +268,9 @@ def fetch_uni():
             print(f"[联通] 详情 {it['id']} 失败: {e}")
             it["summary"], it["content"], it["attachments"] = "", "", []
         time.sleep(0.4)
+    # 详情返回的 noticeTime 会覆盖列表里的发布日期，按最终日期再排一次，
+    # 保证页面展示严格为时间倒序（最新公告在最前）。
+    items.sort(key=lambda x: x.get("date") or "", reverse=True)
     return items
 
 

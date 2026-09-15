@@ -1,16 +1,7 @@
 {
- "updated": "2026-09-15 14:50",
+ "updated": "2026-09-15 14:56",
  "count": 15,
  "items": [
-  {
-   "id": "2c1adc1e9fec277b01a07986fefa00af",
-   "title": "关于流量单月不清零措施的公告",
-   "date": "2015-10-09",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1adc1e9fec277b01a07986fefa00af&pageSize=12&pageNo=1",
-   "summary": "",
-   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20260908/jpg//17888317675462867.jpg\"></p>",
-   "attachments": []
-  },
   {
    "id": "2c1a004d9e74ac34019fb810081d0244",
    "title": "关于规范互联网渠道售卡业务的提示公告",
@@ -27,42 +18,6 @@
    "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1adc0b9e74ac38019f45e8163b02ce&pageSize=12&pageNo=1",
    "summary": "业务调整公告 尊敬的用户： 您好，为了给您带来更好的使用体验，出境漫游流量产品“漫游数据高速叠加包”将于2026年8月10日起停止服务，届时所有用户在境外使用漫游流量时将不再按照该产品计费标准进行计费。如您有使用需求，可订购升级后的同类产品",
    "content": "<p style=\"text-align:center\">业务调整公告</p>\n<p>尊敬的用户：</p>\n<p>您好，为了给您带来更好的使用体验，出境漫游流量产品“漫游数据高速叠加包”将于2026年8月10日起停止服务，届时所有用户在境外使用漫游流量时将不再按照该产品计费标准进行计费。如您有使用需求，可订购升级后的同类产品“出境漫游流量叠加日包”。</p>\n<p>给您带来的不便敬请谅解，感谢您的理解与支持！详询10010(境内免费拨打)/+8618618610010(境外免费拨打)。</p>\n<p>特此公告。</p>\n<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026年7月9日</p>",
-   "attachments": []
-  },
-  {
-   "id": "2c1ae2ce9aeab70e019c4aacb2f8020d",
-   "title": "中国联通江西省分公司宽带线上拆机服务上线公告",
-   "date": "2025-06-30",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1ae2ce9aeab70e019c4aacb2f8020d&pageSize=12&pageNo=1",
-   "summary": "",
-   "content": "<p><br>\n<img src=\"https://m1.img.10010.com/resources/noticeSys/20260211/jpg//17707791503734105.jpg\"></p>",
-   "attachments": []
-  },
-  {
-   "id": "2c1ab3789aeab708019c30875008029b",
-   "title": "关于对《中国联通江西省分公司融合套餐体系产品公示》的补充说明",
-   "date": "2024-08-20",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1ab3789aeab708019c30875008029b&pageSize=12&pageNo=1",
-   "summary": "",
-   "content": "<p><br>\n<img src=\"https://m1.img.10010.com/resources/noticeSys/20260206/jpg//17703406944239631.jpg\"></p>",
-   "attachments": []
-  },
-  {
-   "id": "2c1a61fd9a2c1396019ade28fcd6015b",
-   "title": "VoLTE(借助4G网络传输的高清晰语音通话技术)高清电话规则的公告",
-   "date": "2019-08-07",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1a61fd9a2c1396019ade28fcd6015b&pageSize=12&pageNo=1",
-   "summary": "",
-   "content": "<p><br>\n<img src=\"https://m1.img.10010.com/resources/noticeSys/20251202/jpg//17646637558203297.jpg\"><img src=\"https://m1.img.10010.com/resources/noticeSys/20251202/jpg//17646637678103541.jpg\"></p>",
-   "attachments": []
-  },
-  {
-   "id": "2c1a61fd9a2c1396019a4e9899dc0065",
-   "title": "中国联通江西省分公司通信业务产品调整公告",
-   "date": "2024-09-30",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1a61fd9a2c1396019a4e9899dc0065&pageSize=12&pageNo=1",
-   "summary": "",
-   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20251104/jpg//17622552068283668.jpg\"></p>",
    "attachments": []
   },
   {
@@ -84,6 +39,15 @@
    "attachments": []
   },
   {
+   "id": "2c1ae2ce9aeab70e019c4aacb2f8020d",
+   "title": "中国联通江西省分公司宽带线上拆机服务上线公告",
+   "date": "2025-06-30",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1ae2ce9aeab70e019c4aacb2f8020d&pageSize=12&pageNo=1",
+   "summary": "",
+   "content": "<p><br>\n<img src=\"https://m1.img.10010.com/resources/noticeSys/20260211/jpg//17707791503734105.jpg\"></p>",
+   "attachments": []
+  },
+  {
    "id": "04aefaf093dab0ff01951d63ae2700e2",
    "title": "关于沃派畅视卡业务的公告",
    "date": "2025-02-19",
@@ -102,12 +66,21 @@
    "attachments": []
   },
   {
-   "id": "04aefaf08fc55a6a0190ca43291b0104",
-   "title": "中国联通江西省分公司融合套餐体系产品公示",
-   "date": "2024-07-19",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08fc55a6a0190ca43291b0104&pageSize=12&pageNo=1",
+   "id": "2c1a61fd9a2c1396019a4e9899dc0065",
+   "title": "中国联通江西省分公司通信业务产品调整公告",
+   "date": "2024-09-30",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1a61fd9a2c1396019a4e9899dc0065&pageSize=12&pageNo=1",
    "summary": "",
-   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240719/jpg//20240719171054991.jpg\"></p>",
+   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20251104/jpg//17622552068283668.jpg\"></p>",
+   "attachments": []
+  },
+  {
+   "id": "2c1ab3789aeab708019c30875008029b",
+   "title": "关于对《中国联通江西省分公司融合套餐体系产品公示》的补充说明",
+   "date": "2024-08-20",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1ab3789aeab708019c30875008029b&pageSize=12&pageNo=1",
+   "summary": "",
+   "content": "<p><br>\n<img src=\"https://m1.img.10010.com/resources/noticeSys/20260206/jpg//17703406944239631.jpg\"></p>",
    "attachments": []
   },
   {
@@ -120,12 +93,12 @@
    "attachments": []
   },
   {
-   "id": "04aefaf073104b6a01734b50de20002d",
-   "title": "常用基础资费清单公示",
-   "date": "2020-07-14",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf073104b6a01734b50de20002d&pageSize=12&pageNo=1",
+   "id": "04aefaf08fc55a6a0190ca43291b0104",
+   "title": "中国联通江西省分公司融合套餐体系产品公示",
+   "date": "2024-07-19",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08fc55a6a0190ca43291b0104&pageSize=12&pageNo=1",
    "summary": "",
-   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240515/jpg//20240515174133795.jpg\"></p>",
+   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240719/jpg//20240719171054991.jpg\"></p>",
    "attachments": []
   },
   {
@@ -135,6 +108,33 @@
    "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08f256fde018f7afacaf80089&pageSize=12&pageNo=1",
    "summary": "",
    "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240515/jpg//20240515143943972.jpg\"></p>",
+   "attachments": []
+  },
+  {
+   "id": "04aefaf08f256fde018f7afa40600087",
+   "title": "部分产品停止销售公告",
+   "date": "2024-05-15",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08f256fde018f7afa40600087&pageSize=12&pageNo=1",
+   "summary": "",
+   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240515/jpg//20240515143854198.jpg\"></p>",
+   "attachments": []
+  },
+  {
+   "id": "04aefaf08e8bf079018ebcea0b180033",
+   "title": "江西联通资费停售公告",
+   "date": "2024-04-08",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08e8bf079018ebcea0b180033&pageSize=12&pageNo=1",
+   "summary": "",
+   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240408/png//20240408165312986.png\"></p>",
+   "attachments": []
+  },
+  {
+   "id": "04aefaf08e8bf079018ea360b2120027",
+   "title": "江西联通炫铃产品下架公示",
+   "date": "2024-04-03",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08e8bf079018ea360b2120027&pageSize=12&pageNo=1",
+   "summary": "",
+   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240403/JPG//20240403175257809.JPG\"></p>",
    "attachments": []
   }
  ]
