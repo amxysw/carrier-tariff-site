@@ -328,7 +328,22 @@ function secondLevelOf(it) { return it.secondLevel || "其他"; }
 
 function renderList(section) {
   const rawKey = section; // 原始视图键：quanguo / prov
-  if (section === "prov") { section = ((document.getElementById("pProv") || {}).value || "hunan"); }
+  if (section === "prov") {
+    const pEl = document.getElementById("pProv");
+    if (pEl && pEl.value) {
+      section = pEl.value;
+    } else {
+      // 选择器尚未填充（latest.json 仍在加载）时会走到这里。
+      // 原实现硬编码兜底 "hunan"；电信站省份板块仅湖南，这里改用
+      // DEF_SECTION（= latest.json 的 default）兜底，语义更准确，
+      // 并在索引就绪后校正。
+      section = DEF_SECTION;
+      ensureSections().then(() => {
+        const v = (document.getElementById("pProv") || {}).value;
+        if (v && v !== section) renderList(v);
+      });
+    }
+  }
   if (section !== "quanguo") { ensureSections(); }
   const st = getSt(section);
   const idm = domMap(section);

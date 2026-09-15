@@ -37,7 +37,7 @@
     if (view === "quanguo") return "quanguo";
     var sel = document.getElementById("pProv") || document.getElementById("oProv");
     if (sel && sel.value) return sel.value;
-    return "hunan";
+    return "quanguo";   // 兜底回全网口径：原先硬编码 "hunan"，默认省改为江西后会判错板块
   }
   function secLabel(sec) {
     var sel = document.getElementById("pProv") || document.getElementById("oProv");

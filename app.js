@@ -474,7 +474,22 @@ function domMap(section) {
 function renderList(section) {
   // "prov" 为省份 tab 的占位 section，需解析为下拉当前所选省份（data/ 下按省份文件名存储）
   const rawKey = section; // 原始视图键：quanguo / prov（用于定位排序条）
-  if (section === "prov") { section = ((document.getElementById("pProv") || {}).value || "hunan"); }
+  if (section === "prov") {
+    const pEl = document.getElementById("pProv");
+    if (pEl && pEl.value) {
+      section = pEl.value;
+    } else {
+      // 选择器尚未填充（latest.json 仍在加载）时会走到这里。
+      // 原实现兜底为硬编码 "hunan"，默认省改为江西后，只要点「省份资费」
+      // 的时机稍早于数据就绪，就会去加载 hunan.json 显示湖南数据。
+      // 现改用 DEF_SECTION（= latest.json 的 default）兜底，并在索引就绪后校正。
+      section = DEF_SECTION;
+      ensureSections().then(() => {
+        const v = (document.getElementById("pProv") || {}).value;
+        if (v && v !== section) renderList(v);
+      });
+    }
+  }
   if (section !== "quanguo") { ensureSections(); }
   const st = getSt(section);
   const idm = domMap(section);
