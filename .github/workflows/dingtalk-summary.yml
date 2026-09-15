@@ -144,7 +144,7 @@ jobs:
           fi
           rm -rf _prev && mkdir -p _prev
           cp -f data/*.json _prev/ 2>/dev/null || true
-          python3 pipelines/scripts/announce_fetch.py --move-dir site/data || true
+          python3 pipelines/scripts/announce_fetch.py --move-dir data || true
           python3 scripts/build_site.py 2>&1 | tail -30
           QT=$(python3 -c "import json;print(json.load(open('_site/data/latest.json')).get('quanguo_total',0))" 2>/dev/null || echo 0)
           echo "新构建 quanguo_total=$QT"

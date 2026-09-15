@@ -114,7 +114,7 @@ jobs:
           cp -f data/*.json _prev/ 2>/dev/null || true
           echo "基线文件数: $(ls _prev | wc -l)"
           # 公告
-          python3 pipelines/scripts/announce_fetch.py --move-dir site/data || true
+          python3 pipelines/scripts/announce_fetch.py --move-dir data || true
           # 构建
           python3 scripts/build_site.py 2>&1 | tail -40
 

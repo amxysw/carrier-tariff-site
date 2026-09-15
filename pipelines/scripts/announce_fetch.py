@@ -3,7 +3,8 @@
 """公告抓取脚本：江西移动公告 + 联通公告，各只保留最新 15 条，输出 announce.json
 
 用法:
-    python3 scripts/announce_fetch.py --move-dir site/data --uni-dir unicom/data
+    python3 pipelines/scripts/announce_fetch.py --move-dir data --uni-dir unicom/data
+    （路径相对仓库根目录；前端读取的就是 data/announce.json 与 unicom/data/announce.json）
 说明:
     - 移动(江西)公告列表/详情均为静态 JSON，GET 直取；
       详情接口触发 TLS legacy renegotiation，需注入 openssl_legacy.cnf(见下)。
@@ -278,7 +279,11 @@ def _resolve(root, p):
 
 
 def main():
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # 相对路径基准 = 仓库根目录（--move-dir data / --uni-dir unicom/data 直接对应站点读取位置）。
+    # 此前基准是 pipelines/，workflow 传的 site/data、unicom/data 被解析成
+    # pipelines/site/data、pipelines/unicom/data —— 与前端实际读取的根目录 data/、
+    # unicom/data/ 不一致，导致公告文件写到了镜像位置、线上长期不更新。
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     args = sys.argv[1:]
     move_dir = uni_dir = None
     for i, a in enumerate(args):
