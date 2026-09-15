@@ -55,6 +55,19 @@ function loadAnnounce() {
 let SECTIONS = [];
 let DEF_SECTION = "jiangxi";
 const PROV_KEY = "lt_selected_prov";
+const LEGACY_DEFAULT_PROV = "hunan";        // 旧版默认省（湖南 → 江西 迁移用）
+const PROV_MIGRATED_KEY = "lt_prov_migrated_v2";
+// 默认省由湖南改为江西后的一次性迁移：旧版本访问过的浏览器里存着 "hunan"
+// （当时的默认省），它的优先级高于新默认，会导致「怎么刷新都显示湖南」。
+// 首次加载新版时清除这条过时记忆；之后用户对任何省份（含湖南）的主动选择
+// 都正常保存并生效，不会被反复重置。
+(function migrateLegacyProv() {
+  try {
+    if (localStorage.getItem(PROV_MIGRATED_KEY)) return;
+    if (localStorage.getItem(PROV_KEY) === LEGACY_DEFAULT_PROV) localStorage.removeItem(PROV_KEY);
+    localStorage.setItem(PROV_MIGRATED_KEY, "1");
+  } catch (e) {}
+})();
 function provList() { return SECTIONS.filter((s) => s.section !== "quanguo"); }
 function secName(sec) { const s = SECTIONS.find((x) => x.section === sec); return s ? s.name : sec; }
 
