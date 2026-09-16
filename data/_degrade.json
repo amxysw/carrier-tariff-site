@@ -66,7 +66,10 @@
     "rounds": 0
   },
   "shaanxi": {
-    "rounds": 0
+    "rounds": 1,
+    "last_new": 799,
+    "last_old": 1393,
+    "updated": "2026-09-16 13:33:02"
   },
   "shandong": {
     "rounds": 0
