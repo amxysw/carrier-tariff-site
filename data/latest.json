@@ -1,12 +1,12 @@
 {
-  "updated": "2026-09-17 05:44:02",
+  "updated": "2026-09-17 06:38:03",
   "default": "jiangxi",
   "sections": [
     {
       "section": "quanguo",
       "name": "全网(全国)",
-      "total": 1548,
-      "updated": "2026-09-17 05:25:45"
+      "total": 1549,
+      "updated": "2026-09-17 06:37:04"
     },
     {
       "section": "anhui",
@@ -30,7 +30,7 @@
       "section": "fujian",
       "name": "福建",
       "total": 1888,
-      "updated": "2026-09-17 05:31:30"
+      "updated": "2026-09-17 06:38:03"
     },
     {
       "section": "gansu",
@@ -102,7 +102,7 @@
       "section": "jiangxi",
       "name": "江西",
       "total": 2859,
-      "updated": "2026-09-17 05:32:00"
+      "updated": "2026-09-17 06:37:42"
     },
     {
       "section": "jilin",
@@ -195,7 +195,7 @@
       "updated": "2026-09-17 05:30:17"
     }
   ],
-  "quanguo_total": 1548,
+  "quanguo_total": 1549,
   "prov_total": 43003,
   "prov_dist": {
     "个人资费": {
@@ -675,9 +675,9 @@
   "default_total": 2859,
   "dist": {
     "个人资费": {
-      "套餐": 55,
       "营销活动": 18,
-      "加装包": 1473
+      "套餐": 55,
+      "加装包": 1474
     },
     "政企资费": {
       "加装包": 2
