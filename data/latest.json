@@ -1,12 +1,12 @@
 {
-  "updated": "2026-10-31 06:39:36",
+  "updated": "2026-10-31 08:50:08",
   "default": "jiangxi",
   "sections": [
     {
       "section": "quanguo",
       "name": "全网(全国)",
       "total": 1547,
-      "updated": "2026-10-31 06:19:18"
+      "updated": "2026-10-31 08:49:11"
     },
     {
       "section": "anhui",
@@ -30,7 +30,7 @@
       "section": "fujian",
       "name": "福建",
       "total": 1565,
-      "updated": "2026-10-31 06:27:57"
+      "updated": "2026-10-31 08:50:08"
     },
     {
       "section": "gansu",
