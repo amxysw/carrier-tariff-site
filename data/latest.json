@@ -1,12 +1,12 @@
 {
-  "updated": "2026-11-08 07:02:36",
+  "updated": "2026-11-08 09:27:46",
   "default": "jiangxi",
   "sections": [
     {
       "section": "quanguo",
       "name": "全网(全国)",
       "total": 1540,
-      "updated": "2026-11-08 06:43:05"
+      "updated": "2026-11-08 09:26:55"
     },
     {
       "section": "anhui",
@@ -30,7 +30,7 @@
       "section": "fujian",
       "name": "福建",
       "total": 1592,
-      "updated": "2026-11-08 06:49:43"
+      "updated": "2026-11-08 09:27:46"
     },
     {
       "section": "gansu",
@@ -676,8 +676,8 @@
   "default_total": 2825,
   "dist": {
     "个人资费": {
-      "营销活动": 6,
       "套餐": 58,
+      "营销活动": 6,
       "加装包": 1474
     },
     "政企资费": {
