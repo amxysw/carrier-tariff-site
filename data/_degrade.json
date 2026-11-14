@@ -3,10 +3,10 @@
     "rounds": 0
   },
   "henan": {
-    "rounds": 2,
-    "last_new": 2464,
-    "last_old": 4212,
-    "updated": "2026-11-14 04:25:32"
+    "rounds": 0,
+    "accepted": "2026-11-14 15:18:54",
+    "from": 4212,
+    "to": 2465
   },
   "quanguo": {
     "rounds": 0
