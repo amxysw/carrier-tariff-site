@@ -1,7 +1,16 @@
 {
- "updated": "2026-11-17 09:25",
+ "updated": "2026-11-17 20:07",
  "count": 15,
  "items": [
+  {
+   "id": "2c1a9a28a1698e6101a1e883e45d0163",
+   "title": "外籍电话卡办理温馨提示",
+   "date": "2026-11-17",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=2c1a9a28a1698e6101a1e883e45d0163&pageSize=12&pageNo=1",
+   "summary": "",
+   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20261117/jpg//17949022861992309.jpg\"><img src=\"https://m1.img.10010.com/resources/noticeSys/20261117/jpg//17949022940585392.jpg\"><img src=\"https://m1.img.10010.com/resources/noticeSys/20261117/jpg//17949023016622653.jpg\"></p>",
+   "attachments": []
+  },
   {
    "id": "2c1a9a28a1698e6101a175ef65d90005",
    "title": "关于为江西联通移网用户推送“0元免打扰”产品办理短信 的公告",
@@ -102,15 +111,6 @@
    "attachments": []
   },
   {
-   "id": "04aefaf08f256fde018f7afa40600087",
-   "title": "部分产品停止销售公告",
-   "date": "2024-05-15",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08f256fde018f7afa40600087&pageSize=12&pageNo=1",
-   "summary": "",
-   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240515/jpg//20240515143854198.jpg\"></p>",
-   "attachments": []
-  },
-  {
    "id": "04aefaf08f256fde018f7afacaf80089",
    "title": "部分加油包产品停止销售公告",
    "date": "2024-05-15",
@@ -120,21 +120,21 @@
    "attachments": []
   },
   {
+   "id": "04aefaf08f256fde018f7afa40600087",
+   "title": "部分产品停止销售公告",
+   "date": "2024-05-15",
+   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08f256fde018f7afa40600087&pageSize=12&pageNo=1",
+   "summary": "",
+   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240515/jpg//20240515143854198.jpg\"></p>",
+   "attachments": []
+  },
+  {
    "id": "04aefaf08e8bf079018ebcea0b180033",
    "title": "江西联通资费停售公告",
    "date": "2024-04-08",
    "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08e8bf079018ebcea0b180033&pageSize=12&pageNo=1",
    "summary": "",
    "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240408/png//20240408165312986.png\"></p>",
-   "attachments": []
-  },
-  {
-   "id": "04aefaf08e8bf079018ea360b2120027",
-   "title": "江西联通炫铃产品下架公示",
-   "date": "2024-04-03",
-   "page_url": "https://www.10010.com/wt_links/index.html#/announcementDetail?announcementId=04aefaf08e8bf079018ea360b2120027&pageSize=12&pageNo=1",
-   "summary": "",
-   "content": "<p><img src=\"https://m1.img.10010.com/resources/noticeSys/20240403/JPG//20240403175257809.JPG\"></p>",
    "attachments": []
   }
  ]
